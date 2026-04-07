@@ -77,7 +77,6 @@
         </a>
     </nav>
 
-    <!-- Sidebar Footer Toggle (Desktop Only) -->
     <div class="h-12 w-8 absolute border rounded-xl top-1/2 -translate-y-1/2 -right-4 border-t border-brand-600 hidden lg:flex items-center justify-center cursor-pointer bg-brand-800 transition-colors"
         onclick="toggleSidebarDesktop()">
         <i id="toggle-icon" class="ph ph-caret-left text-xl text-gray-300"></i>
@@ -106,23 +105,25 @@
                 <div class="hidden sm:block text-right">
                     <?php if (isset($_SESSION["role"]) && $_SESSION["role"] == "admin"): ?>
                         <div class="text-sm font-semibold text-gray-800 group-hover:text-brand-600 transition-colors">
-                            Administrator</div>
-                        <div class="text-xs text-gray-500">Sistem Pusat</div>
+                            Admin
+                        </div>
+                        <div class="text-xs text-gray-500"><?= $data["user"]["username"] ?></div>
                     <?php elseif (isset($_SESSION["role"]) && $_SESSION["role"] == "dosen"): ?>
                         <div class="text-sm font-semibold text-gray-800 group-hover:text-brand-600 transition-colors">
-                            <?= $data["user"]["nama_lengkap"] ?></div>
+                            <?= $data["user"]["nama_lengkap"] ?>
+                        </div>
                         <div class="text-xs text-gray-500">NIP: <?= $data["user"]["nip"] ?></div>
                     <?php else: ?>
                         <div class="text-sm font-semibold text-gray-800 group-hover:text-brand-600 transition-colors">
-                            <?= $data["user"]["nama_lengkap"] ?></div>
-                        <div class="text-xs text-gray-500"><?= $data["user"]["nim"] ?> • <?= $data["user"]["jurusan"] ?></div>
+                            <?= $data["user"]["nama_lengkap"] ?>
+                        </div>
+                        <div class="text-xs text-gray-500"><?= $data["user"]["nim"] ?> • <?= $data["user"]["jurusan"] ?>
+                        </div>
                     <?php endif; ?>
                 </div>
-                <?php if (isset($_SESSION["role"]) && $_SESSION["role"] != "admin"): ?>
-                    <img src="<?= isset($data["user"]["foto"]) ? $data["user"]["foto"] : 'https://ui-avatars.com/api/?name=' . str_replace(' ', '+', $data["user"]["nama_lengkap"]) . '&background=2563eb&color=fff&rounded=true' ?>"
-                        alt="foto <?= $data["user"]["nama_lengkap"] ?>"
-                        class="h-10 w-10 rounded-full shadow-sm border-2 border-transparent group-hover:border-brand-500 transition-all">
-                <?php endif; ?>
+                <img src="<?= isset($data["user"]["foto"]) ? $data["user"]["foto"] : 'https://ui-avatars.com/api/?name=' . str_replace(' ', '+', isset($data["user"]["nama_lengkap"]) ? $data["user"]["nama_lengkap"] : $data["user"]['username']) . '&background=2563eb&color=fff&rounded=true' ?>"
+                    alt="foto <?= isset($data["user"]["nama_lengkap"]) ? $data["user"]["nama_lengkap"] : $data["user"]['username'] ?>"
+                    class="h-10 w-10 rounded-full shadow-sm border-2 border-transparent group-hover:border-brand-500 transition-all">
             </div>
         </div>
     </header>

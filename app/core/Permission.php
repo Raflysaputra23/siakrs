@@ -5,8 +5,8 @@ class Permission {
         if(isset($_SESSION["id_user"])) {
             header('location:'.Constant::DIRNAME.'dashboard');
         } else if(isset($_COOKIE["cookie"])) {
-            if(password_verify($_COOKIE["token"], $_COOKIE["cookie"])) {
-                $user = json_decode($_COOKIE["token"], false);
+            $user = json_decode($_COOKIE["token"], false);
+            if(password_verify($user->id_user, $_COOKIE["cookie"])) {
                 $_SESSION["id_user"] = $user->id_user;
                 $_SESSION["nama_lengkap"] = $user->nama_lengkap;
                 $_SESSION["role"] = $user->role;

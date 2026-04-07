@@ -19,7 +19,10 @@ class Dashboard extends Controller {
 
     public function logout() {
         session_destroy();
+        session_unset();
         unset($_SESSION);
+        setcookie("cookie"," ", time() - 3600000 * 2, "/");
+		setcookie("token"," ", time() - 3600000 * 2, "/");
         header("Location: " . CONSTANT::DIRNAME . "login");
     }
 }

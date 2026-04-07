@@ -45,7 +45,7 @@ class Dashboard_model
 
             $filterJadwal = [];
             foreach ($result as $hari) {
-                if ($hari['hari'] == $hariIni) {
+                if (($hari['hari'] + 1) == $hariIni) {
                     $filterJadwal[] = $hari;
                 }
             }

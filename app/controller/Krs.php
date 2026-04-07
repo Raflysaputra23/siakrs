@@ -28,6 +28,7 @@ class Krs extends Controller
     {
         if ($this->model("Krs_model")->ambilKrs($id_kelas)) {
             Flasher::setFlash('Berhasil ambil krs', 'success');
+            $_SESSION['rollback_krs_id'] = $id_kelas;
             header('location: ' . CONSTANT::DIRNAME . 'krs');
             exit;
         } else {

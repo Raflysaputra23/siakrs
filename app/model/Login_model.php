@@ -14,6 +14,8 @@ class Login_model
         try {
             $username = htmlspecialchars($data["username"]);
             $password = htmlspecialchars($data["password"]);
+            $rememberMe = isset($data["remember-me"]) ? true : false;
+
             $this->db->query("SELECT 
         u.username,
         u.password,
@@ -43,9 +45,12 @@ class Login_model
                     $_SESSION["id_user"] = $user["username"];
                     $_SESSION["nama_lengkap"] = $user["nama_lengkap"];
                     $_SESSION["role"] = $user["role"];
-                    Flasher::setFlash("Login berhasil", "success");
-                    header("Location: " . CONSTANT::DIRNAME . "dashboard");
-                    exit;
+                    if($rememberMe) {
+                        $data = ["id_user" => $user["username"], "nama_lengkap" => $user["nama_lengkap"], "role" => $user["role"]];
+                        setcookie("cookie", password_hash($data["id_user"], PASSWORD_DEFAULT), time() + 60 * 60 * 24 * 30, "/");
+                        setcookie("token", json_encode($data), time() + 60 * 60 * 24 * 30, "/");
+                    }
+                    return true;
                 }
             } else {
                 Flasher::setFlash("Username / Password salah", "error");

@@ -1,4 +1,51 @@
-<main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-4 lg:p-8">
+<?php 
+$showRollback = false;
+$rollbackId = "";
+if (isset($_SESSION["rollback_krs_id"])) {
+    $showRollback = true;
+    $rollbackId = $_SESSION["rollback_krs_id"];
+    unset($_SESSION["rollback_krs_id"]);
+}
+?>
+<main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-4 lg:p-8 relative">
+    <?php if ($showRollback): ?>
+    <div id="rollbackKrsPopup" class="fixed bottom-8 right-8 z-50 bg-white border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-xl p-4 flex items-center gap-4 transition-all duration-300 transform translate-y-0 opacity-100 no-print" style="width: 320px;">
+        <div class="flex-1">
+            <h4 class="text-sm font-bold text-gray-800 mb-0.5">Batalkan ambil KRS?</h4>
+            <p class="text-xs text-gray-500 mb-2">Anda dapat membatalkan aksi ini.</p>
+            <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-brand-500 h-1.5 rounded-full w-full origin-left transition-all duration-75" id="rollbackProgressBar"></div>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="closeRollbackKrs()" class="w-9 h-9 flex items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors cursor-pointer">
+                <i class="ph ph-x text-lg"></i>
+            </button>
+            <a href="<?= CONSTANT::DIRNAME ?>krs/hapusKrs/<?= $rollbackId ?>" class="w-9 h-9 flex items-center justify-center rounded-lg bg-green-50 text-green-600 hover:bg-green-600 hover:text-white transition-colors cursor-pointer">
+                <i class="ph ph-check text-lg"></i>
+            </a>
+        </div>
+    </div>
+    <script>
+        let rollbackTime = 5;
+        let rollbackInterval = setInterval(() => {
+            rollbackTime -= 0.05;
+            document.getElementById('rollbackProgressBar').style.width = (rollbackTime / 5) * 100 + '%';
+            if (rollbackTime <= 0) {
+                closeRollbackKrs();
+            }
+        }, 50);
+
+        function closeRollbackKrs() {
+            clearInterval(rollbackInterval);
+            const popup = document.getElementById('rollbackKrsPopup');
+            if (popup) {
+                popup.classList.add('opacity-0', 'translate-y-4');
+                setTimeout(() => popup.remove(), 300);
+            }
+        }
+    </script>
+    <?php endif; ?>
     <?php if (isset($_SESSION["role"]) && $_SESSION["role"] == "dosen"): ?>
         <!-- VIEW DOSEN -->
         <div class="max-w-7xl mx-auto">
@@ -262,8 +309,8 @@
                 <div class="hidden print:flex justify-between items-start mt-12 px-8 pb-8">
                     <div class="text-center">
                         <p class="mb-16 text-sm text-gray-700">Dosen Pembimbing Akademik</p>
-                        <p class="font-bold text-gray-900"><?= $data['dosenPembimbing']['nama_lengkap'] ?></p>
-                        <p class="text-xs text-gray-500">NIP. <?= $data['dosenPembimbing']['nip'] ?></p>
+                        <p class="font-bold text-gray-900"><?= isset($data['dosenPembimbing']['nama_lengkap']) ? $data['dosenPembimbing']['nama_lengkap'] : 'Dosen pembimbing belum ada' ?></p>
+                        <p class="text-xs text-gray-500">NIP. <?= isset($data['dosenPembimbing']['nip']) ? $data['dosenPembimbing']['nip'] : 'NIP pembimbing belum ada' ?></p>
                     </div>
                     <div class="text-center">
                         <p class="mb-1 text-sm text-gray-700">Bandar Lampung, <?= date('d F Y') ?></p>
